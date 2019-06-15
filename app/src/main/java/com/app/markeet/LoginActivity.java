@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         buttonScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //loading = ProgressDialog.show(mContext,null,"Harap Tunggu..",true,false);
+                //loading = ProgressDialog.show(mContext,null,"Wait....",true,false);
                 Toast.makeText(getApplicationContext(), "Harap Tunggu...", Toast.LENGTH_LONG).show();
                 requestLogin();
             }
@@ -74,55 +74,98 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                ResponseBody responseBody = response.body();
-               if(responseBody!=null){
-                   //Toast.makeText(LoginActivity.this, "isi", Toast.LENGTH_SHORT).show();
-                   try {
-                       JSONArray jsonArray = new JSONArray(responseBody.string());
-                       for (int i=0; i<=jsonArray.length(); i++){
+               if(responseBody!=null) {
+                   //Toast.makeText(getApplicationContext(), "Isi...", Toast.LENGTH_LONG).show();
+                   try{
+                       JSONObject jsonObject = new JSONObject(responseBody.string());
+                       String id = jsonObject.getString("id");
+                       String username = String.valueOf(jsonObject.getString("email"));
+                       String status = jsonObject.getString("status");
+                       int cek = Integer.valueOf(status);
 
-                           JSONObject jsonobject = jsonArray.getJSONObject(i);
-                           String id = jsonobject.getString("id");
-                           String username = String.valueOf(jsonobject.getString("username"));
-                           String status = jsonobject.getString("status");
-                           int cek = Integer.valueOf(status);
+                       sharedPref.saveString(sharedPref.SP_IDUSER,id);
+                       sharedPref.saveString(sharedPref.SP_USER,username);
+                       sharedPref.saveString(sharedPref.SP_STATUS,status);
+                       sharedPref.saveBoolean(sharedPref.SP_SUDAH_LOGIN,true);
 
-                           sharedPref.saveString(sharedPref.SP_IDUSER,id);
-                           sharedPref.saveString(sharedPref.SP_USER,username);
-                           sharedPref.saveString(sharedPref.SP_STATUS,status);
-                           sharedPref.saveBoolean(sharedPref.SP_SUDAH_LOGIN,true);
-                          if(cek == 2){
-                               Intent intent = new Intent(LoginActivity.this,HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                               startActivity(intent);
-                               finish();
-                           }
-                           else if(cek == 0){
-                               Intent intent = new Intent(LoginActivity.this,ActivityMain.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                               startActivity(intent);
-                               finish();
-                           }else if(cek == 1){
-                              Intent intent = new Intent(LoginActivity.this,ActivityAdminhome.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                              startActivity(intent);
-                              finish();
-                            }
-                           else{
-                               Toast.makeText(LoginActivity.this,"Not Registered Yet "+status,Toast.LENGTH_LONG).show();
-                           }
-                           //Toast.makeText(LoginActivity.this,"Selamat Datang "+status,Toast.LENGTH_LONG).show();
-
-                           Toast.makeText(LoginActivity.this,"Welcome",Toast.LENGTH_LONG).show();
+                       if(cek == 2){
+                           //Toast.makeText(LoginActivity.this,"UMKM "+status,Toast.LENGTH_LONG).show();
+                           Intent intent = new Intent(LoginActivity.this,HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                           startActivity(intent);
+                           finish();
                        }
+                       else if(cek == 0){
+                           //Toast.makeText(LoginActivity.this,"Buyer "+status,Toast.LENGTH_LONG).show();
+                           Intent intent = new Intent(LoginActivity.this,ActivityMain.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                           startActivity(intent);
+                           finish();
+                       }else if(cek == 1){
+                           //Toast.makeText(LoginActivity.this,"Admin "+status,Toast.LENGTH_LONG).show();
+                           Intent intent = new Intent(LoginActivity.this,ActivityAdminhome.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                           startActivity(intent);
+                           finish();
+                       }
+                       else {
+                           Toast.makeText(LoginActivity.this,"Not Registered Yet "+status,Toast.LENGTH_LONG).show();
+                       }
+                       //Toast.makeText(LoginActivity.this,"Selamat Datang "+status,Toast.LENGTH_LONG).show();
                    }catch (JSONException e){
                        e.printStackTrace();
                    }catch (IOException e){
                        e.printStackTrace();
                    }
+
+                   //Toast.makeText(LoginActivity.this, "isi", Toast.LENGTH_SHORT).show();
+//                   try {
+//
+//                       JSONArray jsonArray = new JSONArray(responseBody.string());
+//                       for (int i=0; i<=jsonArray.length(); i++){
+//
+//                           JSONObject jsonobject = jsonArray.getJSONObject(i);
+//                           String id = jsonobject.getString("id");
+//                           String username = String.valueOf(jsonobject.getString("email"));
+//                           String status = jsonobject.getString("status");
+//                           int cek = Integer.valueOf(status);
+//                           Toast.makeText(LoginActivity.this,"Welcome"+id+"username"+username+" Stats :"+status,Toast.LENGTH_LONG).show();
+
+//                           sharedPref.saveString(sharedPref.SP_IDUSER,id);
+//                           sharedPref.saveString(sharedPref.SP_USER,username);
+//                           sharedPref.saveString(sharedPref.SP_STATUS,status);
+//                           sharedPref.saveBoolean(sharedPref.SP_SUDAH_LOGIN,true);
+//                          if(cek == 2){
+//                               Intent intent = new Intent(LoginActivity.this,HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                               startActivity(intent);
+//                               finish();
+//                           }
+//                           else if(cek == 0){
+//                               Intent intent = new Intent(LoginActivity.this,ActivityMain.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                               startActivity(intent);
+//                               finish();
+//                           }else if(cek == 1){
+//                              Intent intent = new Intent(LoginActivity.this,ActivityAdminhome.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                              startActivity(intent);
+//                              finish();
+//                            }
+//                           else {
+//                               Toast.makeText(LoginActivity.this,"Not Registered Yet "+status,Toast.LENGTH_LONG).show();
+//                           }
+//                           //Toast.makeText(LoginActivity.this,"Selamat Datang "+status,Toast.LENGTH_LONG).show();
+//                       }
+//                   }catch (JSONException e){
+//                       e.printStackTrace();
+//                   }catch (IOException e){
+//                       e.printStackTrace();
+//                   }
                }else{
+                   //loading.dismiss();
                    Toast.makeText(LoginActivity.this, "Not Registered Yet", Toast.LENGTH_SHORT).show();
                }
+
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                //loading.dismiss();
                 Log.e("debug","OnFailure: ERROR >"+t.toString());
             }
         });

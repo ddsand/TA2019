@@ -26,6 +26,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.markeet.connection.API;
+import com.app.markeet.connection.RestAdapter;
 import com.app.markeet.data.AppConfig;
 import com.app.markeet.data.DatabaseHandler;
 import com.app.markeet.data.SharedPref;
@@ -34,12 +36,24 @@ import com.app.markeet.fragment.FragmentCategory;
 import com.app.markeet.fragment.FragmentFeaturedNews;
 import com.app.markeet.fragment.FragmentUmkm;
 import com.app.markeet.umkm.ActivityUmkm;
+import com.app.markeet.umkm.HomeActivity;
 import com.app.markeet.utils.CallbackDialog;
 import com.app.markeet.utils.DialogUtils;
 import com.app.markeet.utils.Tools;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ActivityMain extends AppCompatActivity {
 
@@ -201,6 +215,56 @@ public class ActivityMain extends AppCompatActivity {
         });
     }
 
+    public void processLogout(){
+        String iduser = sharedPref.getSPIdUser().toString();
+        int id_user = Integer.valueOf(iduser);
+        Toast.makeText(ActivityMain.this,"iduser "+iduser,Toast.LENGTH_LONG).show();
+        API api = RestAdapter.createAPI();
+        api.logoutRequest(iduser).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                ResponseBody responseBody = response.body();
+                if(responseBody!=null){
+                    try{
+                        JSONObject jsonObject = new JSONObject(responseBody.string());
+                        String status = jsonObject.getString("success");
+                        if(status.equals("Berhasil Log Out")){
+                            sharedPref.saveBoolean(sharedPref.SP_SUDAH_LOGIN, false);
+                            startActivity(new Intent(ActivityMain.this, LoginActivity.class)
+                                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+                            finish();
+                        }
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }catch (IOException e){
+                        e.printStackTrace();
+                    }
+//                    try {
+//                        JSONArray jsonArray = new JSONArray(responseBody.string());
+//                        for (int i=0; i<=jsonArray.length(); i++){
+//                            JSONObject jsonobject = jsonArray.getJSONObject(i);
+//                            String status = jsonobject.getString("status");
+//                            if(status == "Berhasil Log Out"){
+//                                sharedPref.saveBoolean(sharedPref.SP_SUDAH_LOGIN, false);
+//                                startActivity(new Intent(ActivityMain.this, LoginActivity.class)
+//                                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+//                                finish();
+//                            }
+//                        }
+//                    }catch (JSONException e){
+//                        e.printStackTrace();
+//                    }catch (IOException e){
+//                        e.printStackTrace();
+//                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(ActivityMain.this, "Failed to Logout", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     public boolean onItemSelected(int id) {
         Intent i;
         switch (id) {
@@ -226,7 +290,9 @@ public class ActivityMain extends AppCompatActivity {
                 startActivity(i);
                 break;
             case R.id.nav_profile:
-                Toast.makeText(this, "Daftar UMKM", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Daftar UMKM", Toast.LENGTH_SHORT).show();
+                i = new Intent(this, ActivityDaftarumkm.class);
+                startActivity(i);
                 break;
             case R.id.nav_setting:
                 i = new Intent(this, ActivitySettings.class);
@@ -237,10 +303,11 @@ public class ActivityMain extends AppCompatActivity {
                 startActivity(i);
                 break;
             case R.id.nav_logout:
-                sharedPref.saveBoolean(sharedPref.SP_SUDAH_LOGIN, false);
-                startActivity(new Intent(this, LoginActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
-                finish();
+                  processLogout();
+//                sharedPref.saveBoolean(sharedPref.SP_SUDAH_LOGIN, false);
+//                startActivity(new Intent(this, LoginActivity.class)
+//                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+//                finish();
             default:
                 break;
         }

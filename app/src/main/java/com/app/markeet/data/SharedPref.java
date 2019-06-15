@@ -62,7 +62,7 @@ public class SharedPref {
     }
 
     public String getSpStatus(){
-        return sharedPreferences.getString(SP_IDUSER,"");
+        return sharedPreferences.getString(SP_STATUS,"");
     }
 
     public String getSpUser(){

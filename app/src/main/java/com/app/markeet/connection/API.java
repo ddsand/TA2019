@@ -11,6 +11,7 @@ import com.app.markeet.connection.callbacks.CallbackNewsInfoDetails;
 import com.app.markeet.connection.callbacks.CallbackOrder;
 import com.app.markeet.connection.callbacks.CallbackProduct;
 import com.app.markeet.connection.callbacks.CallbackProductDetails;
+import com.app.markeet.connection.callbacks.CallbackRegistUMKM;
 import com.app.markeet.data.Constant;
 import com.app.markeet.model.Checkout;
 import com.app.markeet.model.DeviceInfo;
@@ -39,8 +40,11 @@ public interface API {
     /*LOGIN-------------------------------------------------*/
     @FormUrlEncoded
     @POST("services/processLog")
-    Call<ResponseBody> loginRequest(@Field("user") String username,
+    Call<ResponseBody> loginRequest(@Field("email") String username,
                                     @Field("password") String pass);
+    @FormUrlEncoded
+    @POST("services/LogoutApi")
+    Call<ResponseBody> logoutRequest(@Field("id") String iduser);
 
     @FormUrlEncoded
     @POST("services/processRegist")
@@ -122,6 +126,17 @@ public interface API {
             @Body Checkout checkout
     );
 
+    /* Registrasi UMKM ------------------------------------------------*/
+
+    @Multipart
+    @POST("service/registasiUMKM")
+    Call<CallbackRegistUMKM> registUMKM(@Part MultipartBody.Part file,
+                                        @Part("fotoktp") RequestBody fotoktp,
+                                        @Part("fotousaha") RequestBody fotousaha,
+                                        @Part("iduser") RequestBody iduser,
+                                        @Part("namausaha") RequestBody namausaha,
+                                        @Part("noktp") RequestBody noktp
+                                        );
     /*PRODUCT CRUD-----------------------------------------------------------------*/
     @Multipart
     @POST("services/insProduct")
