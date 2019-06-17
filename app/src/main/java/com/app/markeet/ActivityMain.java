@@ -218,7 +218,6 @@ public class ActivityMain extends AppCompatActivity {
     public void processLogout(){
         String iduser = sharedPref.getSPIdUser().toString();
         int id_user = Integer.valueOf(iduser);
-        Toast.makeText(ActivityMain.this,"iduser "+iduser,Toast.LENGTH_LONG).show();
         API api = RestAdapter.createAPI();
         api.logoutRequest(iduser).enqueue(new Callback<ResponseBody>() {
             @Override
@@ -239,26 +238,8 @@ public class ActivityMain extends AppCompatActivity {
                     }catch (IOException e){
                         e.printStackTrace();
                     }
-//                    try {
-//                        JSONArray jsonArray = new JSONArray(responseBody.string());
-//                        for (int i=0; i<=jsonArray.length(); i++){
-//                            JSONObject jsonobject = jsonArray.getJSONObject(i);
-//                            String status = jsonobject.getString("status");
-//                            if(status == "Berhasil Log Out"){
-//                                sharedPref.saveBoolean(sharedPref.SP_SUDAH_LOGIN, false);
-//                                startActivity(new Intent(ActivityMain.this, LoginActivity.class)
-//                                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
-//                                finish();
-//                            }
-//                        }
-//                    }catch (JSONException e){
-//                        e.printStackTrace();
-//                    }catch (IOException e){
-//                        e.printStackTrace();
-//                    }
                 }
             }
-
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Toast.makeText(ActivityMain.this, "Failed to Logout", Toast.LENGTH_SHORT).show();
@@ -304,10 +285,6 @@ public class ActivityMain extends AppCompatActivity {
                 break;
             case R.id.nav_logout:
                   processLogout();
-//                sharedPref.saveBoolean(sharedPref.SP_SUDAH_LOGIN, false);
-//                startActivity(new Intent(this, LoginActivity.class)
-//                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
-//                finish();
             default:
                 break;
         }

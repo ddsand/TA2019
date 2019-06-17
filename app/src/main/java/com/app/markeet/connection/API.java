@@ -132,7 +132,6 @@ public interface API {
     @POST("service/registasiUMKM")
     Call<CallbackRegistUMKM> registUMKM(@Part MultipartBody.Part file,
                                         @Part("fotoktp") RequestBody fotoktp,
-                                        @Part("fotousaha") RequestBody fotousaha,
                                         @Part("iduser") RequestBody iduser,
                                         @Part("namausaha") RequestBody namausaha,
                                         @Part("noktp") RequestBody noktp

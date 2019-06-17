@@ -62,6 +62,7 @@
                     android:orientation="vertical">
 
                     <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/btn_verifikasi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:clickable="true"
@@ -76,7 +77,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_medium"
-                        android:text="Verifikasi UMKM"
+                        android:text="UMKM Verification"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2" />
 
                 </LinearLayout>
@@ -89,6 +90,7 @@
                     android:orientation="vertical">
 
                     <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/list_umkm"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:clickable="true"
@@ -103,37 +105,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_medium"
-                        android:text="List UMKM"
+                        android:text="UMKM List"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2" />
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:minWidth="100dp"
-                    android:orientation="vertical">
 
-                    <android.support.design.widget.FloatingActionButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:tint="@color/grey_80"
-                        app:backgroundTint="@android:color/white"
-                        app:elevation="1dp"
-                        app:fabSize="normal"
-                        app:rippleColor="@color/green_50"
-                        app:srcCompat="@drawable/ic_profile" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_medium"
-                        android:text="Info Profil"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2" />
-
-                </LinearLayout>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -170,7 +147,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_medium"
-                        android:text="Keluar"
+                        android:text="Log Out"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2" />
 
                 </LinearLayout>

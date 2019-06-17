@@ -25,22 +25,16 @@ public class ActivityAdminhome extends AppCompatActivity implements BottomNaviga
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adminhome);
         sharedPref = new SharedPref( this);
-        //logout = (Button) findViewById(R.id.buttonLogout);
-        /*logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sharedPref.saveBoolean(sharedPref.SP_SUDAH_LOGIN, false);
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
-                finish();
-            }
-        });*/
+        String iduser = sharedPref.getSPIdUser().toString();
+        if(iduser != null){
+            loadFragment(new FragmentHomeAdmin());
 
-        loadFragment(new FragmentHomeAdmin());
-
-        //getting bottom navigation view and attaching the listener
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigationadmin);
-        navigation.setOnNavigationItemSelectedListener(this);
+            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigationadmin);
+            navigation.setOnNavigationItemSelectedListener(this);
+        }else{
+            startActivity(new Intent(ActivityAdminhome.this, LoginActivity.class));
+            finish();
+        }
     }
 
     @Override
