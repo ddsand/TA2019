@@ -9,9 +9,11 @@ import com.app.markeet.connection.callbacks.CallbackInfo;
 import com.app.markeet.connection.callbacks.CallbackNewsInfo;
 import com.app.markeet.connection.callbacks.CallbackNewsInfoDetails;
 import com.app.markeet.connection.callbacks.CallbackOrder;
+import com.app.markeet.connection.callbacks.CallbackPayment;
 import com.app.markeet.connection.callbacks.CallbackProduct;
 import com.app.markeet.connection.callbacks.CallbackProductDetails;
 import com.app.markeet.connection.callbacks.CallbackRegistUMKM;
+import com.app.markeet.connection.callbacks.CallbackSaldo;
 import com.app.markeet.data.Constant;
 import com.app.markeet.model.Checkout;
 import com.app.markeet.model.DeviceInfo;
@@ -125,6 +127,25 @@ public interface API {
     Call<CallbackOrder> submitProductOrder(
             @Body Checkout checkout
     );
+    @FormUrlEncoded
+    @POST("services/requestEzpy")
+    Call<ResponseBody> EzpayPayment(@Field("order_id") String order_id,
+                                    @Field("email") String email,
+                                    @Field("name") String name,
+                                    @Field("method") String method);
+
+    @FormUrlEncoded
+    @POST("services/requestEzpy")
+    Call<CallbackPayment> VirtualPayment(@Field("order_id") String order_id,
+                                         @Field("email") String email,
+                                         @Field("name") String name,
+                                         @Field("method") String method);
+    /* Saldo cek===========================================*/
+
+    @Headers({CACHE, AGENT, SECURITY})
+    @FormUrlEncoded
+    @POST("services/processSaldo")
+    Call<CallbackSaldo> checkSaldo(@Field("id") String iduser);
 
     /* Registrasi UMKM ------------------------------------------------*/
 

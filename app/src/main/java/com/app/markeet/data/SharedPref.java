@@ -33,6 +33,8 @@ public class SharedPref {
     public static final String SP_USER = "spNama";
     public static final String SP_STATUS = "spStatus";
     public static final String SP_IDUSER ="spIduser";
+    public static final String BALANCE_USER = "spBalance";
+    public static final String SP_NAME ="spNamae";
 
     public static final String SP_SUDAH_LOGIN = "spSudahLogin";
     public static final String PAYMENT_METHOD ="Choose Payment Method";
@@ -52,6 +54,9 @@ public class SharedPref {
     public void saveBoolean(String key, Boolean value){
         sharedPreferences.edit().putBoolean(key,value).apply();
     }
+    public String getSaldo(){return sharedPreferences.getString(BALANCE_USER,"");}
+
+    public String getPaymentMethod(){return  sharedPreferences.getString(PAYMENT_METHOD,"");}
 
     public boolean getSPSudahLogin(){
         return sharedPreferences.getBoolean(SP_SUDAH_LOGIN,false);
@@ -69,6 +74,9 @@ public class SharedPref {
         return sharedPreferences.getString(SP_USER,"");
     }
 
+    public String getSpName(){
+        return sharedPreferences.getString(SP_NAME,"");
+    }
     /**
      * Preference for first launch
      */

@@ -34,6 +34,8 @@ import com.app.markeet.ActivityWishlist;
 import com.app.markeet.LoginActivity;
 import com.app.markeet.R;
 import com.app.markeet.ScannerActivity;
+import com.app.markeet.connection.API;
+import com.app.markeet.connection.RestAdapter;
 import com.app.markeet.data.DatabaseHandler;
 import com.app.markeet.data.SharedPref;
 import com.app.markeet.fragment.FragmentCategory;
@@ -42,6 +44,16 @@ import com.app.markeet.fragment.FragmentUmkm;
 import com.app.markeet.utils.CallbackDialog;
 import com.app.markeet.utils.DialogUtils;
 import com.google.android.gms.ads.InterstitialAd;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -108,7 +120,45 @@ public class HomeActivity extends AppCompatActivity {
         });
         nav_view.setItemIconTintList(getResources().getColorStateList(R.color.nav_state_list));
     }
-    
+
+    public void processLogout(){
+        String iduser = sharedPref.getSPIdUser().toString();
+        int id_user = Integer.valueOf(iduser);
+        API api = RestAdapter.createAPI();
+        api.logoutRequest(iduser).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                ResponseBody responseBody = response.body();
+                if(responseBody!=null){
+                    try{
+                        JSONObject jsonObject = new JSONObject(responseBody.string());
+                        String status = jsonObject.getString("success");
+                        //String name = jsonObject.getString("name");
+                        if(status.equals("Berhasil Log Out")){
+                            sharedPref.saveBoolean(sharedPref.SP_SUDAH_LOGIN, false);
+                            startActivity(new Intent(HomeActivity.this, LoginActivity.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+                            finish();
+                        }
+//                        else if(name.equals("UnauthorizedError")){
+//                            sharedPref.saveBoolean(sharedPref.SP_SUDAH_LOGIN, false);
+//                            startActivity(new Intent(ActivityMain.this, LoginActivity.class)
+//                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+//                            finish();
+//                        }
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }catch (IOException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(HomeActivity.this, "Failed to Logout", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     public boolean onItemSelected(int id) {
         Intent i;
         switch (id) {
@@ -139,10 +189,11 @@ public class HomeActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.nav_logout:
-                sharedPref.saveBoolean(sharedPref.SP_SUDAH_LOGIN, false);
-                startActivity(new Intent(this, LoginActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
-                finish();
+//                sharedPref.saveBoolean(sharedPref.SP_SUDAH_LOGIN, false);
+//                startActivity(new Intent(this, LoginActivity.class)
+//                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+//                finish();
+                processLogout();
             default:
                 break;
         }

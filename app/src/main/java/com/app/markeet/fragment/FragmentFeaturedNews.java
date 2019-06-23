@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.markeet.ActivityMain;
 import com.app.markeet.ActivityNewsInfoDetails;
@@ -26,6 +27,8 @@ import com.app.markeet.adapter.AdapterFeaturedNews;
 import com.app.markeet.connection.API;
 import com.app.markeet.connection.RestAdapter;
 import com.app.markeet.connection.callbacks.CallbackFeaturedNews;
+import com.app.markeet.connection.callbacks.CallbackSaldo;
+import com.app.markeet.data.SharedPref;
 import com.app.markeet.model.NewsInfo;
 import com.app.markeet.umkm.HomeActivity;
 import com.app.markeet.utils.NetworkCheck;
@@ -34,6 +37,7 @@ import com.app.markeet.utils.Tools;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,6 +54,7 @@ public class FragmentFeaturedNews extends Fragment {
     private View lyt_main_content;
     private ImageButton bt_previous, bt_next;
     private LinearLayout layout_dots;
+    private SharedPref sharedPref;
 
     @Nullable
     @Override
@@ -57,6 +62,7 @@ public class FragmentFeaturedNews extends Fragment {
         root_view = inflater.inflate(R.layout.fragment_featured_news, null);
         initComponent();
         requestFeaturedNews();
+        //getSaldo();
         return root_view;
     }
 

@@ -188,7 +188,6 @@ public class ActivityDaftarumkm extends AppCompatActivity {
         RequestBody nusaha = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(namausaha));
         RequestBody no_ktp = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(nomorktp));
         RequestBody desc = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(dekripsi));
-        Toast.makeText(this, "foto ktp"+fotoktp+" iduser :"+iduser+" usaha"+nusaha+"no_ktp:"+no_ktp+" desc" +desc, Toast.LENGTH_LONG).show();
 
     }
 

@@ -2,81 +2,84 @@ package com.app.markeet.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.markeet.R;
 import com.app.markeet.model.ListPayment;
 import com.app.markeet.utils.Tools;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterPayment extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<ListPayment> items = new ArrayList<>();
+public class AdapterPayment extends RecyclerView.Adapter<AdapterPayment.ViewHolder> {
+    private static final String TAG = "AdapterPayment";
 
-    private Context ctx;
-    private AdapterPayment.OnItemClickListener mOnItemClickListener;
+    private ArrayList<String> mImageNames = new ArrayList<>();
+    private ArrayList<String> mDesc = new ArrayList<>();
+    private ArrayList<String> mImages = new ArrayList<>();
+    private Context mContext;
 
-    public interface OnItemClickListener {
-        void onItemClick(View view, ListPayment obj, int position);
-    }
 
-    public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
-        this.mOnItemClickListener = mItemClickListener;
-    }
-
-    public AdapterPayment(Context context, List<ListPayment> items) {
-        this.items = items;
-        ctx = context;
-    }
-
-    public class OriginalViewHolder extends RecyclerView.ViewHolder {
-        public ImageView image;
-        public TextView name;
-        public View lyt_parent;
-
-        public OriginalViewHolder(View v) {
-            super(v);
-            image = (ImageView) v.findViewById(R.id.imagepay);
-            name = (TextView) v.findViewById(R.id.merchant_name);
-            lyt_parent = (View) v.findViewById(R.id.pay_parent);
-        }
+    public AdapterPayment(Context context, ArrayList<String> imageNames, ArrayList<String> images,ArrayList<String> desc ) {
+        mImageNames = imageNames;
+        mDesc = desc;
+        mImages = images;
+        mContext = context;
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder vh;
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_detailpay, parent, false);
-        vh = new OriginalViewHolder(v);
-        return vh;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_detailpay, parent, false);
+        ViewHolder holder = new ViewHolder(view);
+        return holder;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if (holder instanceof OriginalViewHolder) {
-            OriginalViewHolder view = (OriginalViewHolder) holder;
+    public void onBindViewHolder(ViewHolder holder,final int position) {
+        Log.d(TAG, "onBindViewHolder: called.");
 
-            ListPayment p = items.get(position);
-            view.name.setText(p.merchant_name);
-            //Tools.displayImageRound(ctx, view.image, p.image);
-            Tools.displayImageOriginal(ctx, view.image, p.image);
-            view.lyt_parent.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mOnItemClickListener != null) {
-                        mOnItemClickListener.onItemClick(view, items.get(position), position);
-                    }
-                }
-            });
-        }
+        Glide.with(mContext).load(mImages.get(position)).into(holder.image);
+        holder.imageName.setText(mImageNames.get(position));
+        holder.desc.setText(mDesc.get(position));
+
+        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: clicked on: " + mImageNames.get(position));
+
+                Toast.makeText(mContext, mImageNames.get(position), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return mImageNames.size();
+    }
+
+
+    public class ViewHolder extends RecyclerView.ViewHolder{
+        ImageView image;
+        TextView imageName;
+        TextView desc;
+        RelativeLayout parentLayout;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            image = (ImageView) itemView.findViewById(R.id.merchant_name);
+            imageName = (TextView) itemView.findViewById(R.id.imagepay);
+            desc = (TextView) itemView.findViewById(R.id.description);
+            parentLayout = (RelativeLayout) itemView.findViewById(R.id.pay_parent);
+        }
     }
 }

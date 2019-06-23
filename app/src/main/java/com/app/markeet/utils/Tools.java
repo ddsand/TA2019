@@ -136,12 +136,12 @@ public class Tools {
     }
 
     public static String getFormattedDate(Long dateTime) {
-        SimpleDateFormat newFormat = new SimpleDateFormat("MMMM dd, yyyy hh:mm");
+        SimpleDateFormat newFormat = new SimpleDateFormat("dd MMMM , yyyy hh:mm");
         return newFormat.format(new Date(dateTime));
     }
 
     public static String getFormattedDateSimple(Long dateTime) {
-        SimpleDateFormat newFormat = new SimpleDateFormat("MMM dd, yyyy");
+        SimpleDateFormat newFormat = new SimpleDateFormat("dd MMM , yyyy");
         return newFormat.format(new Date(dateTime));
     }
 

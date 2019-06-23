@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.app.markeet.connection.API;
 import com.app.markeet.connection.RestAdapter;
+import com.app.markeet.connection.callbacks.CallbackSaldo;
 import com.app.markeet.data.AppConfig;
 import com.app.markeet.data.DatabaseHandler;
 import com.app.markeet.data.SharedPref;
@@ -68,7 +69,8 @@ public class ActivityMain extends AppCompatActivity {
     private SharedPref sharedPref;
     private InterstitialAd mInterstitialAd;
     private Dialog dialog_failed = null;
-    public boolean category_load = false, news_load = false;
+    public boolean category_load = false, news_load = false,saldo_load=false;
+    private TextView saldotxt;
 
     static ActivityMain activityMain;
 
@@ -88,6 +90,7 @@ public class ActivityMain extends AppCompatActivity {
         initDrawerMenu();
         initComponent();
         initFragment();
+        getSaldo();
         //prepareAds();
         swipeProgress(true);
 
@@ -193,11 +196,13 @@ public class ActivityMain extends AppCompatActivity {
     private void refreshFragment() {
         category_load = false;
         news_load = false;
+        saldo_load=false;
         swipeProgress(true);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 initFragment();
+                getSaldo();
             }
         }, 500);
     }
@@ -214,6 +219,39 @@ public class ActivityMain extends AppCompatActivity {
             }
         });
     }
+    private void getSaldo(){
+        sharedPref = new SharedPref(this);
+        String iduser = sharedPref.getSPIdUser().toString();
+        API api = RestAdapter.createAPI();
+        api.checkSaldo(iduser).enqueue(new Callback<CallbackSaldo>() {
+            @Override
+            public void onResponse(Call<CallbackSaldo> call, Response<CallbackSaldo> response) {
+                CallbackSaldo responseBody = response.body();
+                if(responseBody!=null){
+                    String akun = responseBody.getName().toString();
+                    if(akun.equals("UnauthorizedError")){
+                        Toast.makeText(ActivityMain.this, "Account will relogin", Toast.LENGTH_SHORT).show();
+                        sharedPref.saveBoolean(sharedPref.SP_SUDAH_LOGIN, false);
+                        startActivity(new Intent(ActivityMain.this, LoginActivity.class)
+                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+                        finish();
+                    }else{
+                        String jml_uang = responseBody.getJumlah_uang().toString();
+                        Toast.makeText(ActivityMain.this, "Ada saldo"+jml_uang, Toast.LENGTH_SHORT).show();
+                        saldotxt = (TextView) findViewById(R.id.saldouser);
+                        saldotxt.setText("IDR : "+jml_uang);
+                        sharedPref.saveString(sharedPref.BALANCE_USER,jml_uang);
+                    }
+                }else{
+                    Snackbar.make(parent_view, "EzPay Balance Not Loaded", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<CallbackSaldo> call, Throwable t) {
+                Snackbar.make(parent_view, "EzPay Balance Not Loaded", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     public void processLogout(){
         String iduser = sharedPref.getSPIdUser().toString();
@@ -227,12 +265,19 @@ public class ActivityMain extends AppCompatActivity {
                     try{
                         JSONObject jsonObject = new JSONObject(responseBody.string());
                         String status = jsonObject.getString("success");
+                        //String name = jsonObject.getString("name");
                         if(status.equals("Berhasil Log Out")){
                             sharedPref.saveBoolean(sharedPref.SP_SUDAH_LOGIN, false);
                             startActivity(new Intent(ActivityMain.this, LoginActivity.class)
                                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
                             finish();
                         }
+//                        else if(name.equals("UnauthorizedError")){
+//                            sharedPref.saveBoolean(sharedPref.SP_SUDAH_LOGIN, false);
+//                            startActivity(new Intent(ActivityMain.this, LoginActivity.class)
+//                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+//                            finish();
+//                        }
                     }catch (JSONException e){
                         e.printStackTrace();
                     }catch (IOException e){

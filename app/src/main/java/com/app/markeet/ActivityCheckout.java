@@ -34,6 +34,8 @@ import com.app.markeet.adapter.AdapterShoppingCart;
 import com.app.markeet.connection.API;
 import com.app.markeet.connection.RestAdapter;
 import com.app.markeet.connection.callbacks.CallbackOrder;
+import com.app.markeet.connection.callbacks.CallbackPayment;
+import com.app.markeet.connection.callbacks.CallbackSaldo;
 import com.app.markeet.data.DatabaseHandler;
 import com.app.markeet.data.SharedPref;
 import com.app.markeet.model.BuyerProfile;
@@ -48,10 +50,15 @@ import com.app.markeet.utils.DialogUtils;
 import com.app.markeet.utils.Tools;
 import com.balysv.materialripple.MaterialRippleLayout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,7 +68,7 @@ public class ActivityCheckout extends AppCompatActivity {
     private View parent_view;
     private Spinner shipping;
     private ImageButton bt_date_shipping;
-    private TextView date_shipping;
+    private TextView date_shipping,method_pay;
     private RecyclerView recyclerView;
     private MaterialRippleLayout lyt_add_cart;
     private TextView total_order, tax, price_tax, total_fees,detail_pay;
@@ -126,6 +133,11 @@ public class ActivityCheckout extends AppCompatActivity {
         address = (EditText) findViewById(R.id.address);
         comment = (EditText) findViewById(R.id.comment);
 
+        //payment
+        method_pay = (TextView) findViewById(R.id.payment_method);
+
+        //
+
         buyer_name.addTextChangedListener(new CheckoutTextWatcher(buyer_name));
         email.addTextChangedListener(new CheckoutTextWatcher(email));
         phone.addTextChangedListener(new CheckoutTextWatcher(phone));
@@ -138,8 +150,12 @@ public class ActivityCheckout extends AppCompatActivity {
         address_lyt = (TextInputLayout) findViewById(R.id.address_lyt);
         comment_lyt = (TextInputLayout) findViewById(R.id.comment_lyt);
         shipping = (Spinner) findViewById(R.id.shipping);
-        bt_date_shipping = (ImageButton) findViewById(R.id.bt_date_shipping);
-        date_shipping = (TextView) findViewById(R.id.date_shipping);
+        //bt_date_shipping = (ImageButton) findViewById(R.id.bt_date_shipping);
+        //date_shipping = (TextView) findViewById(R.id.date_shipping);
+        Calendar calendar = Calendar.getInstance();
+        date_ship_millis = calendar.getTimeInMillis();
+
+
         List<String> shipping_list = new ArrayList<>();
         shipping_list.add(getString(R.string.choose_shipping));
         shipping_list.addAll(info.shipping);
@@ -157,12 +173,12 @@ public class ActivityCheckout extends AppCompatActivity {
         progressDialog.setTitle(R.string.title_please_wait);
         progressDialog.setMessage(getString(R.string.content_submit_checkout));
 
-        bt_date_shipping.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialogDatePicker();
-            }
-        });
+//        bt_date_shipping.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialogDatePicker();
+//            }
+//        });
 
         lyt_add_cart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,6 +214,7 @@ public class ActivityCheckout extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         displayData();
+        method_pay.setText(sharedPref.getPaymentMethod().toString());
     }
 
     private void displayData() {
@@ -276,7 +293,7 @@ public class ActivityCheckout extends AppCompatActivity {
     }
 
     private void submitOrderData() {
-        // prepare checkout data
+        // prepare checkout date
         Checkout checkout = new Checkout();
         ProductOrder productOrder = new ProductOrder(buyerProfile, shipping.getSelectedItem().toString(), date_ship_millis, comment.getText().toString().trim());
         productOrder.status = "WAITING";
@@ -364,7 +381,7 @@ public class ActivityCheckout extends AppCompatActivity {
         builder.show();
     }
 
-    public void dialogSuccess(String code) {
+    public void dialogSuccess(final String code) {
         progressDialog.dismiss();
         Dialog dialog = new DialogUtils(this).buildDialogInfo(
                 getString(R.string.success_checkout),
@@ -374,10 +391,16 @@ public class ActivityCheckout extends AppCompatActivity {
                 new CallbackDialog() {
                     @Override
                     public void onPositiveClick(Dialog dialog) {
-                        //Intent to Activity Payment
-                        Intent i = new Intent(ActivityCheckout.this, ActivityPayment.class);
-                        startActivity(i);
-                        finish();
+                        String iduser = sharedPref.getSPIdUser().toString();
+                        String email = sharedPref.getSpUser().toString();
+                        String name = sharedPref.getSpName().toString();
+                        if(sharedPref.getPaymentMethod().toString().equals("Ezpy Balance")){
+                            String method = "ezpy";
+                            EzPay(code,email,name,method);
+                        }else{
+                            String method = "va";
+                            virtualPay(code,email,name,method);
+                        }
                         dialog.dismiss();
                     }
 
@@ -387,7 +410,72 @@ public class ActivityCheckout extends AppCompatActivity {
                 });
         dialog.show();
     }
+    public void virtualPay(String ordercode,String email,String name, String method){
+        API api = RestAdapter.createAPI();
+        api.VirtualPayment(ordercode,email,name,method).enqueue(new Callback<CallbackPayment>() {
+            @Override
+            public void onResponse(Call<CallbackPayment> call, Response<CallbackPayment> response) {
+                CallbackPayment responseBody = response.body();
+                if (responseBody != null) {
+                    String sts = responseBody.status.toString();
+                    if(sts.equals("sukses")){
+                        String billkey = responseBody.payment.getBill_key().toString();
+                        String billercode = responseBody.payment.getBiller_code().toString();
+                        String transactiontime = responseBody.payment.getTransaction_time().toString();
+                        String transactionstatus = responseBody.payment.getTransaction_status().toString();
+                        Intent i = new Intent(ActivityCheckout.this, ActivityPayment.class);
+                        i.putExtra("bill_key",billkey);
+                        i.putExtra("bill_code",billercode);
+                       //i.putExtra("status",transactionstatus);
+                        //i.putExtra("time",transactiontime);
+                        i.putExtra("totalfees",_total_fees_str);
+                        startActivity(i);
+                        finish();
+                    }else{
+                        Snackbar.make(parent_view, "Failed Connecting to the server", Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<CallbackPayment> call, Throwable t) {
+                Snackbar.make(parent_view, "Failed Connecting to the server", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+    public void EzPay(String ordercode,String email,String name, String method){
+        API api = RestAdapter.createAPI();
+        api.EzpayPayment(ordercode,email,name,method).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                ResponseBody responseBody = response.body();
+                if(responseBody!=null){
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseBody.string());
+                        String status = jsonObject.getString("status");
+                        if(status.equals("sukses")){
+                            Snackbar.make(parent_view, "Thankyou, Your Order will be review soon", Snackbar.LENGTH_SHORT).show();
+                            Intent i = new Intent(ActivityCheckout.this, ActivityMain.class);
+                            startActivity(i);
+                            finish();
+                        }else{
+                            Snackbar.make(parent_view, "Failed Using Ezpy Balance", Snackbar.LENGTH_SHORT).show();
+                        }
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }catch (IOException e){
+                        e.printStackTrace();
+                    }
+                }else{
+                    Snackbar.make(parent_view, "Failed Using Ezpy Balance", Snackbar.LENGTH_SHORT).show();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Snackbar.make(parent_view, "Failed Using Ezpy Balance", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
     private void dialogDatePicker() {
         Calendar cur_calender = Calendar.getInstance();
         datePickerDialog = new DatePickerDialog(this, R.style.DatePickerTheme, new DatePickerDialog.OnDateSetListener() {

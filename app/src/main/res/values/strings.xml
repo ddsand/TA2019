@@ -128,7 +128,7 @@
     </string>
     <string name="success_checkout">Congratulation</string>
     <string name="msg_success_checkout">
-        Successfully checkout order.\nYour order code : %1$s\n\nYour order will be review soon.
+        Successfully checkout order.\nYour order code : %1$s\n\nPay the checkout fees.
     </string>
     <string name="process_checkout">PROCESS CHECKOUT</string>
 

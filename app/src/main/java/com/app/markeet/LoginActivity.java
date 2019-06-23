@@ -81,11 +81,13 @@ public class LoginActivity extends AppCompatActivity {
                        String id = jsonObject.getString("id");
                        String username = String.valueOf(jsonObject.getString("email"));
                        String status = jsonObject.getString("status");
+                       String name = jsonObject.getString("name");
                        int cek = Integer.valueOf(status);
 
                        sharedPref.saveString(sharedPref.SP_IDUSER,id);
                        sharedPref.saveString(sharedPref.SP_USER,username);
                        sharedPref.saveString(sharedPref.SP_STATUS,status);
+                       sharedPref.saveString(sharedPref.SP_NAME,name);
                        sharedPref.saveBoolean(sharedPref.SP_SUDAH_LOGIN,true);
 
                        if(cek == 2){
