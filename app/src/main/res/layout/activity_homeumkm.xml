@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:id="@+id/containeradmin"
+    android:id="@+id/containerumkm"
     android:layout_height="match_parent"
-    tools:context=".ActivityAdminhome">
+    tools:context=".ActivityHomeumkm">
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar_layout"
+        android:id="@+id/appbar_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <include layout="@layout/toolbar" />
     </android.support.design.widget.AppBarLayout>
-
     <FrameLayout
-        android:id="@+id/frame_container"
+        android:id="@+id/frame_umkm"
+        android:layout_above="@+id/navigationumkm"
+        android:layout_below="@+id/appbar_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
     <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigationadmin"
+        android:id="@+id/navigationumkm"
         app:itemIconTint="@android:color/white"
         app:itemTextColor="@android:color/white"
         android:layout_width="match_parent"
@@ -29,6 +29,5 @@
         android:foreground="?attr/selectableItemBackground"
         android:layout_gravity="bottom"
         android:background="@color/colorPrimary"
-        app:menu="@menu/menu_admin" />
-
-</android.support.design.widget.CoordinatorLayout>
+        app:menu="@menu/menu_umkm" />
+</RelativeLayout>

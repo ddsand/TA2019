@@ -87,7 +87,7 @@ public class ActivitySplash extends AppCompatActivity {
                         finish();
                     }else if(sharedPref.getSpStatus().equals("2")){
                         //Toast.makeText(ActivitySplash.this, "Welcome UMKM", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(ActivitySplash.this,HomeActivity.class)
+                        startActivity(new Intent(ActivitySplash.this,ActivityHomeumkm.class)
                                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
                         finish();
                     }else if(sharedPref.getSpStatus().equals("1")){
@@ -102,35 +102,6 @@ public class ActivitySplash extends AppCompatActivity {
                 }
             }
         },2000);
-//        TimerTask task = new TimerTask() {
-//            @Override
-//            public void run() {
-//                if (sharedPref.getSPSudahLogin()){
-//                    String isi = sharedPref.getSpStatus().toString();
-//                    if(sharedPref.getSpStatus().equals("0")){
-//                        Toast.makeText(ActivitySplash.this, "Welcome Customer", Toast.LENGTH_SHORT).show();
-////                        startActivity(new Intent(ActivitySplash.this,ActivityMain.class)
-////                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
-////                        finish();
-//                    }else if(sharedPref.getSpStatus().equals("2")){
-//                        Toast.makeText(ActivitySplash.this, "Welcome UMKM", Toast.LENGTH_SHORT).show();
-////                        startActivity(new Intent(ActivitySplash.this,HomeActivity.class)
-////                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
-////                        finish();
-//                    }else if(sharedPref.getSpStatus().equals("1")){
-//                        Toast.makeText(ActivitySplash.this, "Welcome Admin", Toast.LENGTH_SHORT).show();
-////                        startActivity(new Intent(ActivitySplash.this,ActivityAdminhome.class)
-////                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
-////                        finish();
-//                    }
-//                }else{
-//                    startActivity(new Intent(ActivitySplash.this,LoginActivity.class));
-//                    finish();
-//                }
-//
-//            }
-//        };
-//        new Timer().schedule(task, 2000);
     }
 
     private void requestInfo() {

@@ -38,6 +38,7 @@ public class ActivityShoppingCart extends AppCompatActivity {
     private TextView price_total;
     private SharedPref sharedPref;
     private Info info;
+    private Button btnchk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +48,21 @@ public class ActivityShoppingCart extends AppCompatActivity {
         sharedPref = new SharedPref(this);
         info = sharedPref.getInfoData();
 
+
         initToolbar();
         iniComponent();
+        btnchk = (Button) findViewById(R.id.buttonCheckout);
+        btnchk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (adapter.getItemCount() > 0) {
+                    Intent intent = new Intent(ActivityShoppingCart.this, ActivityCheckout.class);
+                    startActivity(intent);
+                } else {
+                    Snackbar.make(parent_view, R.string.msg_cart_empty, Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void iniComponent() {

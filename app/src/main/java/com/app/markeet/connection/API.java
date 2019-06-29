@@ -2,6 +2,7 @@ package com.app.markeet.connection;
 
 import com.app.markeet.connection.callbacks.CallbackCatSpinner;
 import com.app.markeet.connection.callbacks.CallbackCategory;
+import com.app.markeet.connection.callbacks.CallbackDetailProduct;
 import com.app.markeet.connection.callbacks.CallbackDevice;
 import com.app.markeet.connection.callbacks.CallbackFeaturedNews;
 import com.app.markeet.connection.callbacks.CallbackInProduct;
@@ -14,6 +15,7 @@ import com.app.markeet.connection.callbacks.CallbackProduct;
 import com.app.markeet.connection.callbacks.CallbackProductDetails;
 import com.app.markeet.connection.callbacks.CallbackRegistUMKM;
 import com.app.markeet.connection.callbacks.CallbackSaldo;
+import com.app.markeet.connection.callbacks.CallbackUmkmProduct;
 import com.app.markeet.data.Constant;
 import com.app.markeet.model.Checkout;
 import com.app.markeet.model.DeviceInfo;
@@ -43,15 +45,15 @@ public interface API {
     @FormUrlEncoded
     @POST("services/processLog")
     Call<ResponseBody> loginRequest(@Field("email") String username,
-                                    @Field("password") String pass);
+                                    @Field("password") String pass,
+                                    @Field("serial") String serial);
     @FormUrlEncoded
     @POST("services/LogoutApi")
     Call<ResponseBody> logoutRequest(@Field("id") String iduser);
 
     @FormUrlEncoded
     @POST("services/processRegist")
-    Call<ResponseBody> registerRequest(@Field("user") String username,
-                                       @Field("password") String password,
+    Call<ResponseBody> registerRequest(@Field("password") String password,
                                        @Field("name") String name,
                                        @Field("email") String email,
                                        @Field("addr") String addr,
@@ -147,6 +149,10 @@ public interface API {
     @POST("services/processSaldo")
     Call<CallbackSaldo> checkSaldo(@Field("id") String iduser);
 
+    /*--------------------------------------------------------*/
+    @Headers({CACHE, AGENT, SECURITY})
+    @FormUrlEncoded
+
     /* Registrasi UMKM ------------------------------------------------*/
 
     @Multipart
@@ -158,6 +164,18 @@ public interface API {
                                         @Part("noktp") RequestBody noktp
                                         );
     /*PRODUCT CRUD-----------------------------------------------------------------*/
+    @FormUrlEncoded
+    @POST("services/allproductuser")
+    Call<CallbackUmkmProduct> Allproduct(@Field("iduser") String userid);
+
+    @FormUrlEncoded
+    @POST("services/productUser")
+    Call<CallbackDetailProduct> DetailProduct(@Field("iduser") String userid,
+                                              @Field("id") String idproduk);
+    @FormUrlEncoded
+    @POST("services/delsProduct")
+    Call<ResponseBody> hapusProduct(@Field("id") String idproduk);
+
     @Multipart
     @POST("services/insProduct")
     Call<CallbackInProduct> uploadFile(@Part MultipartBody.Part file,
@@ -170,5 +188,6 @@ public interface API {
                                        @Part("status") RequestBody status,
                                        @Part("iduser") RequestBody iduser,
                                        @Part("category") RequestBody category);
+
 
 }

@@ -84,7 +84,9 @@
         <activity android:name=".ActivityAdminhome" />
         <activity android:name=".ActivityPayment" />
         <activity android:name=".ActivityDetailpay" />
-        <activity android:name=".ActivityDaftarumkm"></activity>
+        <activity android:name=".ActivityDaftarumkm" />
+        <activity android:name=".ActivityHomeumkm" />
+        <activity android:name=".ActivityInumkm"></activity>
     </application>
 
 </manifest>

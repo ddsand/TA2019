@@ -57,12 +57,17 @@ public class ProductActivity extends AppCompatActivity {
     String mediaPath, mediaPath1;
     Spinner spCategory,statusProduct;
     String[] mediaColumns = {MediaStore.Video.Media._ID};
+
+    private String intent_id= "", intent_action = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
         sharedPref = new SharedPref(this);
         final Context context = this;
+
+        intent_action= getIntent().getStringExtra("intent_action");
+
         imgView = (ImageView) findViewById(R.id.preview);
         imageBtn = (Button)findViewById(R.id.buttonImage);
         buttonProduct = (Button) findViewById(R.id.buttonProduct);
@@ -79,8 +84,6 @@ public class ProductActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String kategori = parent.getItemAtPosition(position).toString();
-//                requestDetailDosen(selectedName);
-                Toast.makeText(context, kategori, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -92,7 +95,6 @@ public class ProductActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String statuspro = parent.getItemAtPosition(position).toString();
-                Toast.makeText(getApplicationContext(), statuspro, Toast.LENGTH_SHORT).show();
 
             }
 

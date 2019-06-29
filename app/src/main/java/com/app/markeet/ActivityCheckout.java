@@ -183,7 +183,26 @@ public class ActivityCheckout extends AppCompatActivity {
         lyt_add_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                submitForm();
+                String saldo = sharedPref.getSaldo().toString();
+                Double saldoo = Double.valueOf(saldo);
+                if(sharedPref.getPaymentMethod().isEmpty()) {
+                    Snackbar.make(parent_view, "Please Choose Your Payment Method", Snackbar.LENGTH_SHORT).show();
+                }else{
+                    if(sharedPref.getPaymentMethod().toString().equals("Ezpy Balance")){
+                        if(saldo.equals("0")){
+                            Snackbar.make(parent_view, "Require top up your ezpay balance", Snackbar.LENGTH_SHORT).show();
+                        }else if(saldoo < _total_fees){
+                            Snackbar.make(parent_view, "Your balance is not enough", Snackbar.LENGTH_SHORT).show();
+                        }else{
+                            submitForm();
+                        }
+                    }else{
+                        submitForm();
+                    }
+                }
+
+
+
             }
         });
 
@@ -394,9 +413,11 @@ public class ActivityCheckout extends AppCompatActivity {
                         String iduser = sharedPref.getSPIdUser().toString();
                         String email = sharedPref.getSpUser().toString();
                         String name = sharedPref.getSpName().toString();
+
                         if(sharedPref.getPaymentMethod().toString().equals("Ezpy Balance")){
                             String method = "ezpy";
                             EzPay(code,email,name,method);
+
                         }else{
                             String method = "va";
                             virtualPay(code,email,name,method);

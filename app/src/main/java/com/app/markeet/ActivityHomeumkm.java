@@ -7,31 +7,28 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.app.markeet.data.SharedPref;
-import com.app.markeet.fragment.FragmentAdmin;
 import com.app.markeet.fragment.FragmentHomeAdmin;
-import com.app.markeet.fragment.FragmentProfilAdmin;
+import com.app.markeet.fragment.FragmentHomeumkm;
+import com.app.markeet.fragment.FragmentProfilUMKM;
+import com.app.markeet.fragment.FragmentTransaksi;
 
-public class ActivityAdminhome extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class ActivityHomeumkm extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private SharedPref sharedPref;
-    private Button logout;
-    TextView txtAdmin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_adminhome);
+        setContentView(R.layout.activity_homeumkm);
+
         sharedPref = new SharedPref( this);
         String iduser = sharedPref.getSPIdUser().toString();
         if(iduser != ""){
-            loadFragment(new FragmentHomeAdmin());
-            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigationadmin);
+            loadFragment(new FragmentHomeumkm());
+            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigationumkm);
             navigation.setOnNavigationItemSelectedListener(this);
         }else{
-            startActivity(new Intent(ActivityAdminhome.this, LoginActivity.class));
+            startActivity(new Intent(ActivityHomeumkm.this, LoginActivity.class));
             finish();
         }
     }
@@ -41,33 +38,29 @@ public class ActivityAdminhome extends AppCompatActivity implements BottomNaviga
         Fragment fragment = null;
 
         switch (item.getItemId()) {
-            case R.id.nav_homeadmin:
-                fragment = new FragmentHomeAdmin();
+            case R.id.nav_homeumkm:
+                fragment = new FragmentHomeumkm();
                 break;
-
-            case R.id.nav_umkmm:
-                fragment = new FragmentAdmin();
+            case R.id.nav_transaksi:
+                fragment= new FragmentTransaksi();
                 break;
-
-            case R.id.nav_profilee:
-                fragment = new FragmentProfilAdmin();
+            case R.id.nav_umkmprof:
+                fragment=new FragmentProfilUMKM();
                 break;
         }
-
         return loadFragment(fragment);
     }
-
-
     private boolean loadFragment(Fragment fragment) {
 
         if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.frame_container, fragment)
+                    .replace(R.id.frame_umkm, fragment)
                     .addToBackStack(null)
                     .commit();
             return true;
         }
         return false;
     }
+
 }

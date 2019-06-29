@@ -118,6 +118,8 @@
     <string name="invalid_date_ship">invalid date shipping</string>
     <string name="invalid_comment">invalid comment</string>
 
+    <string name="ok_pay">Process Pay</string>
+
     <string name="title_please_wait">Please Wait</string>
     <string name="content_submit_checkout">Submit Checkout&#8230;</string>
     <string name="confirmation">Confirmation</string>
@@ -225,6 +227,8 @@
     <string name="SAVE">SAVE</string>
     <string name="NEXT">NEXT</string>
     <string name="SKIP">SKIP</string>
+
+    <string name="confirm_delete">Are you sure want to delete </string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

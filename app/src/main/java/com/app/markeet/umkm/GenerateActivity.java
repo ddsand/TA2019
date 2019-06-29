@@ -45,20 +45,23 @@ public class GenerateActivity extends AppCompatActivity {
     }
     private void saveImage(Bitmap finalBitmap, String image_name) {
 
+//        String root = Environment.getExternalStorageDirectory()
+//                + "/Android/data/"
+//                + getApplicationContext().getPackageName()
+//                + "/Files";
         String root = Environment.getExternalStorageDirectory()
-                + "/Android/data/"
-                + getApplicationContext().getPackageName()
-                + "/Files";
+                + "/FilesCeMart";
         File myDir = new File(root);
         myDir.mkdirs();
-        String fname = "Image-" + image_name+ ".png";
+        String fname = "Label-" + image_name+ ".png";
         File file = new File(myDir, fname);
         if (file.exists()) file.delete();
         Log.i("LOAD", root + fname);
         try {
             FileOutputStream out = new FileOutputStream(file);
             finalBitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
-            Toast.makeText(this, "Saved Label", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Saved Label on "+root, Toast.LENGTH_SHORT).show();
+
             out.flush();
             out.close();
         } catch (Exception e) {

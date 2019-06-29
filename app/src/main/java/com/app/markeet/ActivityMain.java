@@ -237,7 +237,7 @@ public class ActivityMain extends AppCompatActivity {
                         finish();
                     }else{
                         String jml_uang = responseBody.getJumlah_uang().toString();
-                        Toast.makeText(ActivityMain.this, "Ada saldo"+jml_uang, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(ActivityMain.this, "Ada saldo"+jml_uang, Toast.LENGTH_SHORT).show();
                         saldotxt = (TextView) findViewById(R.id.saldouser);
                         saldotxt.setText("IDR : "+jml_uang);
                         sharedPref.saveString(sharedPref.BALANCE_USER,jml_uang);
