@@ -1,6 +1,8 @@
 package com.app.markeet;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +10,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -26,16 +29,25 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.app.markeet.connection.API;
+import com.app.markeet.connection.RestAdapter;
+import com.app.markeet.connection.callbacks.CallbackRegistUMKM;
 import com.app.markeet.data.SharedPref;
 import com.app.markeet.umkm.ProductActivity;
+import com.app.markeet.utils.CallbackDialog;
+import com.app.markeet.utils.DialogUtils;
 
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.util.Random;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ActivityDaftarumkm extends AppCompatActivity {
     private View parent_view;
@@ -49,6 +61,7 @@ public class ActivityDaftarumkm extends AppCompatActivity {
     ImageView imgView;
     String mediaPath, mediaPath1;
     String[] mediaColumns = {MediaStore.Video.Media._ID};
+    ProgressDialog progressDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +111,10 @@ public class ActivityDaftarumkm extends AppCompatActivity {
                 submitForm();
             }
         });
+        progressDialog = new ProgressDialog(ActivityDaftarumkm.this);
+        progressDialog.setCancelable(false);
+        progressDialog.setTitle(R.string.title_please_wait);
+        progressDialog.setMessage("Submitting Data....");
     }
 
 
@@ -171,13 +188,22 @@ public class ActivityDaftarumkm extends AppCompatActivity {
         builder.setPositiveButton(R.string.YES, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                uploadFile(nama_usaha.getText().toString(),nomorktp.getText().toString(),deskripsi_usaha.getText().toString());
+                progressDialogSend();
             }
         });
         builder.setNegativeButton(R.string.NO, null);
         builder.show();
     }
+    public void progressDialogSend(){
+        progressDialog.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                uploadFile(nama_usaha.getText().toString(),nomorktp.getText().toString(),deskripsi_usaha.getText().toString());
+            }
+        }, 2000);
 
+    }
     public void uploadFile(String namausaha,String nomorktp,String dekripsi) {
         File file = new File(mediaPath);
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
@@ -187,8 +213,24 @@ public class ActivityDaftarumkm extends AppCompatActivity {
         RequestBody iduser = RequestBody.create(MediaType.parse("multipart/form-data"),idu);
         RequestBody nusaha = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(namausaha));
         RequestBody no_ktp = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(nomorktp));
-        RequestBody desc = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(dekripsi));
+        RequestBody deskripsi = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(dekripsi));
 
+        API api = RestAdapter.createAPI();
+        api.registUMKM(fileToUpload,fotoktp,iduser,nusaha,no_ktp,deskripsi).enqueue(new Callback<CallbackRegistUMKM>() {
+            @Override
+            public void onResponse(Call<CallbackRegistUMKM> call, Response<CallbackRegistUMKM> response) {
+               if(response.body().getStatus().equals("success")){
+                   dialogSuccess();
+               }else{
+                   dialogFailedRetry();
+               }
+            }
+
+            @Override
+            public void onFailure(Call<CallbackRegistUMKM> call, Throwable t) {
+                Toast.makeText(ActivityDaftarumkm.this, "error"+t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private boolean validateUMKM() {
@@ -244,5 +286,49 @@ public class ActivityDaftarumkm extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+    public void dialogFailedRetry() {
+        progressDialog.dismiss();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.failed);
+        builder.setMessage("Oops Failed when uploading data, please check your internet connection");
+        builder.setPositiveButton(R.string.TRY_AGAIN, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                uploadFile(nama_usaha.getText().toString(),nomorktp.getText().toString(),deskripsi_usaha.getText().toString());
+            }
+        });
+        builder.setNegativeButton(R.string.SETTING, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                startActivity(new Intent(getApplicationContext(), ActivitySettings.class));
+            }
+        });
+        builder.show();
+    }
+    public void dialogSuccess() {
+        progressDialog.dismiss();
+        Dialog dialog = new DialogUtils(this).buildDialogInfo(
+                getString(R.string.success_checkout),
+                String.format("Succesfully submit the data, Please wait for admin to verify your data"),
+                getString(R.string.OK),
+                R.drawable.img_checkout_success,
+                new CallbackDialog() {
+                    @Override
+                    public void onPositiveClick(Dialog dialog) {
+                        Intent i = new Intent(ActivityDaftarumkm.this,ActivityMain.class);
+                        startActivity(i);
+                        finish();
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onNegativeClick(Dialog dialog) {
+                        Intent i = new Intent(ActivityDaftarumkm.this,ActivityMain.class);
+                        startActivity(i);
+                        finish();
+                    }
+                });
+        dialog.show();
     }
 }

@@ -238,5 +238,20 @@
         <item>OUT OF STOCK</item>
         <item>SUSPEND</item>
     </string-array>
+    <string-array name="status_order">
+        <item>WAITING</item>
+        <item>PROCESSED</item>
+        <item>ACCEPTED</item>
+    </string-array>
+    <string name="accountnumber">Example : 14002840582</string>
+    <string name="accountowner">Example : Dewi Sandy Islamiati</string>
+    <string name="explainone">Enter your information related to your bank account</string>
+    <string name="explaintwo">if you pay with bank teller, then fill <b>Account number</b> with <b>0000</b> and <b>Account Owner</b> with <b>Your Name</b></string>
 
+    <string name="paymentone">Please Pay in time </string>
+    <string name="exp_payment">Please do not share your payment data to others except Market</string>
+    <string name="transferto">Transfer to the following account number</string>
+    <string name="numberpay">Amount you should pay</string>
+    <string name="digitlast">The Last Digit amount of your payment fees are for verification to the system and fast checking by admin</string>
+    <string name="accountname">Dewi Sandy Islamiati</string>
 </resources>

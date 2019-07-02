@@ -86,13 +86,13 @@ public class LoginActivity extends AppCompatActivity {
                        String id = jsonObject.getString("id");
                        String email = String.valueOf(jsonObject.getString("email"));
                        String status = jsonObject.getString("status");
+                       String msg= jsonObject.getString("msg");
                        String name = jsonObject.getString("name");
                        String addres = jsonObject.getString("addr");
                        int cek = Integer.valueOf(status);
-                       if(status.equals("Gagal")){
+                       if(msg.equals("Gagal")){
                            Toast.makeText(mContext, "Check Your Internet Connection", Toast.LENGTH_SHORT).show();
-                       }else{
-
+                       }else if(msg.equals("Sukses")){
                            sharedPref.saveString(sharedPref.SP_IDUSER,id);
                            sharedPref.saveString(sharedPref.SP_USER,email);
                            sharedPref.saveString(sharedPref.SP_STATUS,status);
@@ -126,7 +126,8 @@ public class LoginActivity extends AppCompatActivity {
                            else {
                                Toast.makeText(LoginActivity.this,"Not Registered Yet "+status,Toast.LENGTH_LONG).show();
                            }
-
+                       }else{
+                           Toast.makeText(mContext, "Check Internet Connection", Toast.LENGTH_SHORT).show();
                        }
                    }catch (JSONException e){
                        e.printStackTrace();

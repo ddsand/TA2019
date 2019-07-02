@@ -7,6 +7,7 @@ import com.app.markeet.connection.callbacks.CallbackDevice;
 import com.app.markeet.connection.callbacks.CallbackFeaturedNews;
 import com.app.markeet.connection.callbacks.CallbackInProduct;
 import com.app.markeet.connection.callbacks.CallbackInfo;
+import com.app.markeet.connection.callbacks.CallbackListOrder;
 import com.app.markeet.connection.callbacks.CallbackNewsInfo;
 import com.app.markeet.connection.callbacks.CallbackNewsInfoDetails;
 import com.app.markeet.connection.callbacks.CallbackOrder;
@@ -150,18 +151,21 @@ public interface API {
     Call<CallbackSaldo> checkSaldo(@Field("id") String iduser);
 
     /*--------------------------------------------------------*/
-    @Headers({CACHE, AGENT, SECURITY})
     @FormUrlEncoded
+    @POST("services/allOrder")
+    Call<CallbackListOrder> checkOrder(@Field("iduser") String iduser,
+                                       @Field("isi") String isi);
 
     /* Registrasi UMKM ------------------------------------------------*/
 
     @Multipart
-    @POST("service/registasiUMKM")
+    @POST("services/registasiUMKM")
     Call<CallbackRegistUMKM> registUMKM(@Part MultipartBody.Part file,
                                         @Part("fotoktp") RequestBody fotoktp,
                                         @Part("iduser") RequestBody iduser,
                                         @Part("namausaha") RequestBody namausaha,
-                                        @Part("noktp") RequestBody noktp
+                                        @Part("noktp") RequestBody noktp,
+                                        @Part("deskripsi") RequestBody deskripsi
                                         );
     /*PRODUCT CRUD-----------------------------------------------------------------*/
     @FormUrlEncoded

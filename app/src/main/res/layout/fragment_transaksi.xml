@@ -4,26 +4,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.FragmentTransaksi">
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        >
+        <Spinner
+            android:id="@+id/filterorder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+        </Spinner>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="15dp"/>
         <android.support.v4.widget.SwipeRefreshLayout
+            android:layout_below="@+id/filterorder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/RefreshOrder">
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
+                android:id="@+id/recyclerTransaksi"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/white"
                 android:scrollbars="vertical"
                 android:scrollingCache="true" />
-
             <include
                 android:id="@+id/lyt_no_item"
                 layout="@layout/include_no_item"
+                android:visibility="gone" />
+            <include
+                android:id="@+id/lyt_failed"
+                layout="@layout/include_failed"
                 android:visibility="gone" />
         </android.support.v4.widget.SwipeRefreshLayout>
 

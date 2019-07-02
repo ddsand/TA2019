@@ -5,7 +5,7 @@ android {
     buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.app.markeet"
-        minSdkVersion 14
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -59,7 +59,7 @@ dependencies {
 
     // firebase ads library
     compile 'com.google.firebase:firebase-ads:9.2.1'
-
+    compile 'com.weiwangcn.betterspinner:library-material:1.1.0'
 
     compile 'me.dm7.barcodescanner:zxing:1.9'
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'

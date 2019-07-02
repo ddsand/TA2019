@@ -52,6 +52,7 @@ public class FragmentHomeumkm extends Fragment {
         sharedPref = new SharedPref(this.getActivity());
         btnlogout = (Button) fragmentView.findViewById(R.id.btnLogout);
         Saldo = (TextView) fragmentView.findViewById(R.id.saldoku);
+        getSaldo();
         btnlogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -26,7 +26,7 @@ public class ActivityDetailpay extends AppCompatActivity {
 //    private ArrayList<String> mNames = new ArrayList<>();
 //    private ArrayList<String> mImageUrls = new ArrayList<>();
 //    private ArrayList<String> mDesc = new ArrayList<>();
-    private LinearLayout paymentone,paymenttwo;
+    private LinearLayout paymentone,paymenttwo,paymentmandiri;
     private TextView saldotext;
     private SharedPref sharedPref;
 
@@ -53,6 +53,8 @@ public class ActivityDetailpay extends AppCompatActivity {
     private void initPayment(){
         paymentone = (LinearLayout) findViewById(R.id.payment_bank);
         paymenttwo = (LinearLayout) findViewById(R.id.payment_ez);
+        paymentmandiri =(LinearLayout) findViewById(R.id.pay_mandiri);
+
         String saldo = sharedPref.getSaldo().toString();
         saldotext = (TextView) findViewById(R.id.saldopayment);
         saldotext.setText("Balance : IDR. "+saldo);
@@ -60,8 +62,8 @@ public class ActivityDetailpay extends AppCompatActivity {
         paymentone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ActivityDetailpay.this, "Bank", Toast.LENGTH_SHORT).show();
-                sharedPref.saveString(sharedPref.PAYMENT_METHOD,"Bank Transfer");
+                //Toast.makeText(ActivityDetailpay.this, "Bank", Toast.LENGTH_SHORT).show();
+                sharedPref.saveString(sharedPref.PAYMENT_METHOD,"Mandiri Virtual Account");
                 Intent i = new Intent(ActivityDetailpay.this, ActivityCheckout.class);
                 startActivity(i);
                 finish();
@@ -70,8 +72,18 @@ public class ActivityDetailpay extends AppCompatActivity {
         paymenttwo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ActivityDetailpay.this, "Ezpy", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ActivityDetailpay.this, "Ezpy", Toast.LENGTH_SHORT).show();
                 sharedPref.saveString(sharedPref.PAYMENT_METHOD,"Ezpy Balance");
+                Intent i = new Intent(ActivityDetailpay.this, ActivityCheckout.class);
+                startActivity(i);
+                finish();
+            }
+        });
+        paymentmandiri.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(ActivityDetailpay.this, "Mand", Toast.LENGTH_SHORT).show();
+                sharedPref.saveString(sharedPref.PAYMENT_METHOD,"Mandiri Transfer");
                 Intent i = new Intent(ActivityDetailpay.this, ActivityCheckout.class);
                 startActivity(i);
                 finish();

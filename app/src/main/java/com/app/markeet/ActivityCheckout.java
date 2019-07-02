@@ -29,6 +29,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.markeet.adapter.AdapterShoppingCart;
 import com.app.markeet.connection.API;
@@ -57,6 +58,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
+import java.util.function.DoubleToIntFunction;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -84,6 +87,7 @@ public class ActivityCheckout extends AppCompatActivity {
     private Long date_ship_millis = 0L;
     private Double _total_fees = 0D;
     private String _total_fees_str;
+    private String codepay;
 
     private Call<CallbackOrder> callbackCall = null;
     // construct dialog progress
@@ -200,8 +204,6 @@ public class ActivityCheckout extends AppCompatActivity {
                         submitForm();
                     }
                 }
-
-
 
             }
         });
@@ -340,6 +342,7 @@ public class ActivityCheckout extends AppCompatActivity {
                         order.cart_list.add(c);
                     }
                     db.saveOrder(order);
+                    codepay = order.code;
                     dialogSuccess(order.code);
                 } else {
                     dialogFailedRetry();
@@ -417,10 +420,20 @@ public class ActivityCheckout extends AppCompatActivity {
                         if(sharedPref.getPaymentMethod().toString().equals("Ezpy Balance")){
                             String method = "ezpy";
                             EzPay(code,email,name,method);
-
-                        }else{
+                        }else if(sharedPref.getPaymentMethod().toString().equals("Mandiri Virtual Account")){
                             String method = "va";
                             virtualPay(code,email,name,method);
+                        }else{
+                            final Random random = new Random();
+                            int hargarand = random.nextInt(100);
+                            int total = (int) (_total_fees+hargarand);
+                            String totall = String.valueOf(total);
+                            Intent i = new Intent(ActivityCheckout.this,ActivityDetailTransfer.class);
+                            i.putExtra("nominalbank",totall);
+                            i.putExtra("totalfees",_total_fees_str);
+                            startActivity(i);
+                            finish();
+                            //Toast.makeText(ActivityCheckout.this, "isi", Toast.LENGTH_SHORT).show();
                         }
                         dialog.dismiss();
                     }
@@ -432,6 +445,7 @@ public class ActivityCheckout extends AppCompatActivity {
         dialog.show();
     }
     public void virtualPay(String ordercode,String email,String name, String method){
+
         API api = RestAdapter.createAPI();
         api.VirtualPayment(ordercode,email,name,method).enqueue(new Callback<CallbackPayment>() {
             @Override

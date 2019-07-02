@@ -78,6 +78,7 @@ public class ActivityPayment extends ExpandableListActivity {
             }
         });
     }
+
     public void setSupportActionBar(Toolbar supportActionBar) {
         this.supportActionBar = supportActionBar;
     }
