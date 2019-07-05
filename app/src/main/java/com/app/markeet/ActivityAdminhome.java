@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.app.markeet.data.SharedPref;
 import com.app.markeet.fragment.FragmentAdmin;
 import com.app.markeet.fragment.FragmentHomeAdmin;
+import com.app.markeet.fragment.FragmentInProduct;
+import com.app.markeet.fragment.FragmentListumkm;
 import com.app.markeet.fragment.FragmentProfilAdmin;
 
 public class ActivityAdminhome extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -44,11 +46,9 @@ public class ActivityAdminhome extends AppCompatActivity implements BottomNaviga
             case R.id.nav_homeadmin:
                 fragment = new FragmentHomeAdmin();
                 break;
-
             case R.id.nav_umkmm:
-                fragment = new FragmentAdmin();
+                fragment = new FragmentListumkm();
                 break;
-
             case R.id.nav_profilee:
                 fragment = new FragmentProfilAdmin();
                 break;

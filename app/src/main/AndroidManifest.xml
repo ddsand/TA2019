@@ -88,7 +88,8 @@
         <activity android:name=".ActivityHomeumkm" />
         <activity android:name=".ActivityInumkm" />
         <activity android:name=".ActivityDetailTransfer" />
-        <activity android:name=".ActivityWaitingpay"></activity>
+        <activity android:name=".ActivityWaitingpay" />
+        <activity android:name=".ActivityManualorder"></activity>
     </application>
 
 </manifest>

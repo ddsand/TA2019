@@ -29,7 +29,7 @@
                 android:orientation="vertical"
                 >
                 <LinearLayout
-                    android:background="@color/grey_3"
+                    android:background="@color/grey_5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -43,24 +43,26 @@
                         android:textAlignment="center"
                         android:text="@string/paymentone"
                         android:layout_margin="@dimen/spacing_large"/>
-                    <TextView
-                        android:id="@+id/jambayar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAllCaps="true"
-                        android:textStyle="bold"
-                        android:textSize="25dp"
-                        android:textColor="@color/grey_60"
-                        android:textAlignment="center"
-                        android:text="27 Jam : 57 Menit"
-                        />
+                    <!--<TextView-->
+                        <!--android:id="@+id/jambayar"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textAllCaps="true"-->
+                        <!--android:textStyle="bold"-->
+                        <!--android:textSize="25dp"-->
+                        <!--android:textColor="@color/grey_60"-->
+                        <!--android:textAlignment="center"-->
+                        <!--android:text="27 Jam : 57 Menit"-->
+                        <!--/>-->
                     <TextView
                         android:id="@+id/datepay"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/grey_60"
                         android:textAlignment="center"
-                        android:textStyle="italic"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:textAllCaps="true"
                         android:text="(Before Sabtu,29 Juni 2018)"
                         android:layout_margin="@dimen/spacing_large"/>
                     <View

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.app.markeet.ActivityMain;
+import com.app.markeet.ActivityManualorder;
 import com.app.markeet.LoginActivity;
 import com.app.markeet.R;
 import com.app.markeet.connection.API;
@@ -33,7 +34,7 @@ import retrofit2.Response;
 
 public class FragmentProfilAdmin extends Fragment {
 
-    FloatingActionButton verifyumkm,logout_btn,listumkm;
+    FloatingActionButton verifyumkm,logout_btn,listumkm,listorder;
     private SharedPref sharedPref;
 
     @Override
@@ -45,8 +46,15 @@ public class FragmentProfilAdmin extends Fragment {
         listumkm = (FloatingActionButton) fragmentView.findViewById(R.id.list_umkm);
         verifyumkm = (FloatingActionButton) fragmentView.findViewById(R.id.btn_verifikasi);
         logout_btn = (FloatingActionButton) fragmentView.findViewById(R.id.keluaradmin);
+        listorder = (FloatingActionButton) fragmentView.findViewById(R.id.list_order);
 
-
+        listorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), ActivityManualorder.class);
+                startActivity(i);
+            }
+        });
         listumkm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -8,6 +8,8 @@ import com.app.markeet.connection.callbacks.CallbackFeaturedNews;
 import com.app.markeet.connection.callbacks.CallbackInProduct;
 import com.app.markeet.connection.callbacks.CallbackInfo;
 import com.app.markeet.connection.callbacks.CallbackListOrder;
+import com.app.markeet.connection.callbacks.CallbackListUMKM;
+import com.app.markeet.connection.callbacks.CallbackManualOrder;
 import com.app.markeet.connection.callbacks.CallbackNewsInfo;
 import com.app.markeet.connection.callbacks.CallbackNewsInfoDetails;
 import com.app.markeet.connection.callbacks.CallbackOrder;
@@ -42,6 +44,10 @@ public interface API {
     String AGENT = "User-Agent: Markeet";
     String SECURITY = "Security: " + Constant.SECURITY_CODE;
 
+    /*Admin---*/
+    @GET("services/processListOrder")
+    Call<CallbackManualOrder> AllOrderManual();
+    
     /*LOGIN-------------------------------------------------*/
     @FormUrlEncoded
     @POST("services/processLog")
@@ -143,6 +149,13 @@ public interface API {
                                          @Field("email") String email,
                                          @Field("name") String name,
                                          @Field("method") String method);
+    @FormUrlEncoded
+    @POST("services/ManualPay")
+    Call<ResponseBody> ManualPayment(@Field("order_id") String order_id,
+                                    @Field("pay") String payment,
+                                     @Field("rekening") String rekening,
+                                     @Field("namarekening") String namarekening);
+
     /* Saldo cek===========================================*/
 
     @Headers({CACHE, AGENT, SECURITY})
@@ -157,7 +170,6 @@ public interface API {
                                        @Field("isi") String isi);
 
     /* Registrasi UMKM ------------------------------------------------*/
-
     @Multipart
     @POST("services/registasiUMKM")
     Call<CallbackRegistUMKM> registUMKM(@Part MultipartBody.Part file,
@@ -167,6 +179,9 @@ public interface API {
                                         @Part("noktp") RequestBody noktp,
                                         @Part("deskripsi") RequestBody deskripsi
                                         );
+
+    @GET("services/processAllUMKM")
+    Call<CallbackListUMKM> AllUMKM();
     /*PRODUCT CRUD-----------------------------------------------------------------*/
     @FormUrlEncoded
     @POST("services/allproductuser")

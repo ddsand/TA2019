@@ -385,6 +385,7 @@ public class ActivityCheckout extends AppCompatActivity {
 
     public void dialogFailedRetry() {
         progressDialog.dismiss();
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.failed);
         builder.setMessage(getString(R.string.failed_checkout));
@@ -430,6 +431,7 @@ public class ActivityCheckout extends AppCompatActivity {
                             String totall = String.valueOf(total);
                             Intent i = new Intent(ActivityCheckout.this,ActivityDetailTransfer.class);
                             i.putExtra("nominalbank",totall);
+                            i.putExtra("kodetransaksi",code);
                             i.putExtra("totalfees",_total_fees_str);
                             startActivity(i);
                             finish();
