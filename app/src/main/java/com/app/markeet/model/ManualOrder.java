@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 public class ManualOrder {
     @Expose
     @SerializedName("id")
-    public Integer idorder;
+    public String idorder;
     @Expose
     @SerializedName("code")
     public String ordercode;
@@ -56,11 +56,11 @@ public class ManualOrder {
         this.serial_order = serial_order;
     }
 
-    public Integer getIdorder() {
+    public String getIdorder() {
         return idorder;
     }
 
-    public void setIdorder(Integer idorder) {
+    public void setIdorder(String idorder) {
         this.idorder = idorder;
     }
 

@@ -85,7 +85,7 @@
                         android:orientation="horizontal"
                         android:layout_marginRight="@dimen/spacing_large">
                         <TextView
-                            android:id="@+id/order_code"
+                            android:id="@+id/kode_pesan"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:maxLines="1"
@@ -116,94 +116,6 @@
                         android:textColor="@color/grey_90"
                         android:textStyle="bold"
                         android:layout_marginBottom="@dimen/spacing_small"/>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="@dimen/spacing_large"
-                            android:layout_height="@dimen/spacing_large"
-                            android:tint="@color/grey_40"
-                            android:src="@drawable/ic_money"/>
-                        <View
-                            android:layout_width="@dimen/spacing_medium"
-                            android:layout_height="0dp" />
-                        <TextView
-                            android:id="@+id/order_pricee"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:text="12329248"
-                            android:textStyle="bold"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="@dimen/spacing_large"
-                            android:layout_height="@dimen/spacing_large"
-                            android:src="@drawable/ic_profile"
-                            android:tint="@color/grey_40" />
-                        <View
-                            android:layout_width="@dimen/spacing_medium"
-                            android:layout_height="0dp" />
-                        <TextView
-                            android:id="@+id/nama_akun"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:text="Nama Akun"
-                            android:textStyle="bold"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                       >
-                        <ImageView
-                            android:layout_width="@dimen/spacing_large"
-                            android:layout_height="@dimen/spacing_large"
-                            android:src="@drawable/ic_payment"
-                            android:tint="@color/grey_40" />
-                        <View
-                            android:layout_width="@dimen/spacing_medium"
-                            android:layout_height="0dp" />
-                        <TextView
-                            android:id="@+id/no_rekening"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:text="1400018932747"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                             />
-                        <View
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"/>
-                        <TextView
-                            android:layout_marginRight="@dimen/spacing_large"
-                            android:id="@+id/textMenu"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:paddingLeft="@dimen/activity_horizontal_margin"
-                            android:text="&#8942;"
-                            android:textAppearance="?android:textAppearanceLarge" />
-                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </com.balysv.materialripple.MaterialRippleLayout>

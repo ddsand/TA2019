@@ -41,12 +41,20 @@ import retrofit2.http.Query;
 public interface API {
 
     String CACHE = "Cache-Control: max-age=0";
-    String AGENT = "User-Agent: Markeet";
+    String AGENT = "User-Agent: CE-Market";
     String SECURITY = "Security: " + Constant.SECURITY_CODE;
 
     /*Admin---*/
     @GET("services/processListOrder")
     Call<CallbackManualOrder> AllOrderManual();
+
+    @FormUrlEncoded
+    @POST("services/processUpOrder")
+    Call<ResponseBody> upOrder(@Field("idorder") String idorder,
+                               @Field("serialuser") String serialuser,
+                               @Field("statusorder") String statusorder);
+    @GET("services/processAllUMKM")
+    Call<CallbackListUMKM> AllUMKM();
     
     /*LOGIN-------------------------------------------------*/
     @FormUrlEncoded
@@ -180,8 +188,7 @@ public interface API {
                                         @Part("deskripsi") RequestBody deskripsi
                                         );
 
-    @GET("services/processAllUMKM")
-    Call<CallbackListUMKM> AllUMKM();
+
     /*PRODUCT CRUD-----------------------------------------------------------------*/
     @FormUrlEncoded
     @POST("services/allproductuser")
