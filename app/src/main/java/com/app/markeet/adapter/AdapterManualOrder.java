@@ -76,7 +76,6 @@ public class AdapterManualOrder extends RecyclerView.Adapter<AdapterManualOrder.
                 accname.setText(manualOrder.getNama_akun());
                 accnumber.setText(manualOrder.getRekening());
 
-
                 btnverify.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

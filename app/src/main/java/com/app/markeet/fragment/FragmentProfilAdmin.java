@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.app.markeet.ActivityMain;
 import com.app.markeet.ActivityManualorder;
+import com.app.markeet.ActivityUnverifiedumkm;
 import com.app.markeet.LoginActivity;
 import com.app.markeet.R;
 import com.app.markeet.connection.API;
@@ -65,6 +66,8 @@ public class FragmentProfilAdmin extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "test", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getContext(), ActivityUnverifiedumkm.class);
+                startActivity(i);
             }
         });
         logout_btn.setOnClickListener(new View.OnClickListener() {

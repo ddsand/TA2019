@@ -2,6 +2,7 @@ package com.app.markeet.connection;
 
 import com.app.markeet.connection.callbacks.CallbackCatSpinner;
 import com.app.markeet.connection.callbacks.CallbackCategory;
+import com.app.markeet.connection.callbacks.CallbackDetailOrder;
 import com.app.markeet.connection.callbacks.CallbackDetailProduct;
 import com.app.markeet.connection.callbacks.CallbackDevice;
 import com.app.markeet.connection.callbacks.CallbackFeaturedNews;
@@ -19,6 +20,7 @@ import com.app.markeet.connection.callbacks.CallbackProductDetails;
 import com.app.markeet.connection.callbacks.CallbackRegistUMKM;
 import com.app.markeet.connection.callbacks.CallbackSaldo;
 import com.app.markeet.connection.callbacks.CallbackUmkmProduct;
+import com.app.markeet.connection.callbacks.CallbackUnverifiedUMKM;
 import com.app.markeet.data.Constant;
 import com.app.markeet.model.Checkout;
 import com.app.markeet.model.DeviceInfo;
@@ -53,9 +55,19 @@ public interface API {
     Call<ResponseBody> upOrder(@Field("idorder") String idorder,
                                @Field("serialuser") String serialuser,
                                @Field("statusorder") String statusorder);
+
     @GET("services/processAllUMKM")
     Call<CallbackListUMKM> AllUMKM();
-    
+
+    @GET("services/processUnverified")
+    Call<CallbackUnverifiedUMKM> UnverfiedUMKM();
+
+    @FormUrlEncoded
+    @POST("services/processUMKM")
+    Call<ResponseBody> verifyUMKM(@Field("isistatus") String data,
+                                    @Field("idumkm") String idumkm,
+                                    @Field("serial") String serial);
+
     /*LOGIN-------------------------------------------------*/
     @FormUrlEncoded
     @POST("services/processLog")
@@ -177,6 +189,15 @@ public interface API {
     Call<CallbackListOrder> checkOrder(@Field("iduser") String iduser,
                                        @Field("isi") String isi);
 
+    @FormUrlEncoded
+    @POST("services/detailOrder")
+    Call<CallbackDetailOrder> detOrder(@Field("order_id") String order_id,
+                                       @Field("iduser") String iduser);
+    @FormUrlEncoded
+    @POST("services/processSet")
+    Call<ResponseBody> setOrder(@Field("order_id") String order_id,
+                                @Field("iduser") String iduser,
+                                @Field("serial") String serial);
     /* Registrasi UMKM ------------------------------------------------*/
     @Multipart
     @POST("services/registasiUMKM")

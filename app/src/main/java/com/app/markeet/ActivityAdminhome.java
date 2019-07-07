@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -22,12 +24,17 @@ public class ActivityAdminhome extends AppCompatActivity implements BottomNaviga
     private SharedPref sharedPref;
     private Button logout;
     TextView txtAdmin;
+    private ActionBar actionBar;
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adminhome);
         sharedPref = new SharedPref( this);
         String iduser = sharedPref.getSPIdUser().toString();
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        initToolbar();
         if(iduser != ""){
             loadFragment(new FragmentHomeAdmin());
             BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigationadmin);
@@ -38,18 +45,31 @@ public class ActivityAdminhome extends AppCompatActivity implements BottomNaviga
         }
     }
 
+    private void initToolbar() {
+        setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
+        //actionBar.setDisplayHomeAsUpEnabled(true);
+        //actionBar.setHomeButtonEnabled(true);
+        //actionBar.setTitle(R.string.app_name);
+    }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
 
         switch (item.getItemId()) {
             case R.id.nav_homeadmin:
+                actionBar.setTitle("Home");
+                setSupportActionBar(toolbar);
                 fragment = new FragmentHomeAdmin();
                 break;
             case R.id.nav_umkmm:
+                actionBar.setTitle("List UMKM");
+                setSupportActionBar(toolbar);
                 fragment = new FragmentListumkm();
                 break;
             case R.id.nav_profilee:
+                actionBar.setTitle("Profil");
+                setSupportActionBar(toolbar);
                 fragment = new FragmentProfilAdmin();
                 break;
         }

@@ -91,6 +91,7 @@ public class ActivityDetailTransfer extends AppCompatActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(responseBody.string());
                         String besok = jsonObject.getString("tomorrow");
+                        //Toast.makeText(ActivityDetailTransfer.this, "rekening "+accNumber.getText().toString(), Toast.LENGTH_SHORT).show();
                         Intent i = new Intent(ActivityDetailTransfer.this,ActivityWaitingpay.class);
                         i.putExtra("total_harga",jbayar);
                         i.putExtra("nomorrekening",accNumber.getText().toString());

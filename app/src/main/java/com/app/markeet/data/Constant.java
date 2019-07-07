@@ -30,4 +30,8 @@ public class Constant {
         return WEB_URL + "uploads/category/" + file_name;
     }
 
+    public static String getURLimgUmkm(String file_name) {
+        return WEB_URL + "uploads/umkm/" + file_name;
+    }
+
 }

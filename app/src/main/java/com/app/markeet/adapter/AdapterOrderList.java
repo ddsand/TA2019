@@ -1,6 +1,7 @@
 package com.app.markeet.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.app.markeet.ActivityUMKMorder;
 import com.app.markeet.R;
 import com.app.markeet.model.ListOrder;
 
@@ -39,6 +42,17 @@ public class AdapterOrderList extends RecyclerView.Adapter<AdapterOrderList.MyVi
         if(status.equals("WAITING")){
             holder.mStatusOrder.setTextColor(ContextCompat.getColor(ctx,R.color.colorWarning));
             holder.mNotif.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(ctx, R.color.colorWarning)));
+            holder.mParent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String id = myData.getKode();
+                    String serial = myData.getSerial();
+                    Intent i = new Intent(ctx, ActivityUMKMorder.class);
+                    i.putExtra("idorder",id);
+                    i.putExtra("serialorder",serial);
+                    ctx.startActivity(i);
+                }
+            });
         }else if(status.equals("PROCESSED")){
             holder.mStatusOrder.setTextColor(ContextCompat.getColor(ctx,R.color.colorAddCart));
             holder.mNotif.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(ctx, R.color.colorAddCart)));
@@ -51,13 +65,7 @@ public class AdapterOrderList extends RecyclerView.Adapter<AdapterOrderList.MyVi
         holder.mOrderCode.setText(mListOrders.get(position).getKode());
         holder.mStatusOrder.setText(mListOrders.get(position).getStatusorder());
 
-        holder.mParent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String id = myData.getKode();
 
-            }
-        });
     }
 
     @Override

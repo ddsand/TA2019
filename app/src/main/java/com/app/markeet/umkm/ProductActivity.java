@@ -1,13 +1,18 @@
 package com.app.markeet.umkm;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +25,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.markeet.ActivityDaftarumkm;
+import com.app.markeet.ActivityMain;
+import com.app.markeet.ActivitySettings;
 import com.app.markeet.R;
 import com.app.markeet.connection.API;
 import com.app.markeet.connection.RestAdapter;
@@ -30,6 +38,8 @@ import com.app.markeet.connection.callbacks.CallbackProductDetails;
 import com.app.markeet.data.SharedPref;
 import com.app.markeet.model.Category;
 import com.app.markeet.model.ListCategory;
+import com.app.markeet.utils.CallbackDialog;
+import com.app.markeet.utils.DialogUtils;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -57,6 +67,7 @@ public class ProductActivity extends AppCompatActivity {
     String mediaPath, mediaPath1;
     Spinner spCategory,statusProduct;
     String[] mediaColumns = {MediaStore.Video.Media._ID};
+    ProgressDialog progressDialog = null;
 
     private String intent_id= "", intent_action = "";
     @Override
@@ -106,10 +117,7 @@ public class ProductActivity extends AppCompatActivity {
         buttonProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadFile(prices.getText().toString(),discounts.getText().toString(),
-                        stocks.getText().toString(),descriptions.getText().toString(),
-                        statusProduct.getSelectedItem().toString(),spCategory.getSelectedItem().toString());
-                String getText = productname.getText().toString();
+                progressDialogSend();
             }
         });
         imageBtn.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +128,25 @@ public class ProductActivity extends AppCompatActivity {
                 startActivityForResult(galleryIntent, 0);
             }
         });
+        progressDialog = new ProgressDialog(ProductActivity.this);
+        progressDialog.setCancelable(false);
+        progressDialog.setTitle(R.string.title_please_wait);
+        progressDialog.setMessage("Submitting Data....");
+    }
+
+    public void progressDialogSend(){
+        progressDialog.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //uploadFile(nama_usaha.getText().toString(),nomorktp.getText().toString(),deskripsi_usaha.getText().toString());
+                uploadFile(prices.getText().toString(),discounts.getText().toString(),
+                        stocks.getText().toString(),descriptions.getText().toString(),
+                        statusProduct.getSelectedItem().toString(),spCategory.getSelectedItem().toString());
+                String getText = productname.getText().toString();
+            }
+        }, 2000);
+
     }
 
     private void initSpinner(){
@@ -231,17 +258,18 @@ public class ProductActivity extends AppCompatActivity {
         String idu=sharedPref.getSPIdUser().toString();
         RequestBody iduser = RequestBody.create(MediaType.parse("multipart/form-data"),idu);
         API api = RestAdapter.createAPI();
-
         api.uploadFile(fileToUpload,images,namaproduk,price,price_discount,stock,description,status,iduser,category).enqueue(new Callback<CallbackInProduct>() {
             @Override
             public void onResponse(Call<CallbackInProduct> call, Response<CallbackInProduct> response) {
                 CallbackInProduct serverResponse = response.body();
-                if (serverResponse != null) {
+                if (response.isSuccessful()) {
+                    //dialogSuccess();
                     String idproduk = serverResponse.getData().getId().toString();
                     String produks = serverResponse.getData().getName().toString();
 
                     MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
                     try {
+                        progressDialog.dismiss();
                         BitMatrix bitMatrix = multiFormatWriter.encode(idproduk, BarcodeFormat.QR_CODE,200,200);
                         BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                         Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
@@ -253,17 +281,59 @@ public class ProductActivity extends AppCompatActivity {
                     }catch (WriterException e){
                         e.printStackTrace();
                     }
-                   //Toast.makeText(ProductActivity.this, "oke ini id nya"+idproduk, Toast.LENGTH_SHORT).show();
                 } else {
                     assert serverResponse != null;
                     Log.v("Response", serverResponse.toString());
+                    dialogFailedRetry();
                 }
             }
 
             @Override
             public void onFailure(Call<CallbackInProduct> call, Throwable t) {
-
+                Toast.makeText(ProductActivity.this,"Error "+t.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
+    }
+    public void dialogFailedRetry() {
+        progressDialog.dismiss();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.failed);
+        builder.setMessage("Oops Failed when uploading data, please check your internet connection");
+        builder.setPositiveButton(R.string.TRY_AGAIN, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                uploadFile(prices.getText().toString(),discounts.getText().toString(),
+                        stocks.getText().toString(),descriptions.getText().toString(),
+                        statusProduct.getSelectedItem().toString(),spCategory.getSelectedItem().toString());
+                String getText = productname.getText().toString();
+            }
+        });
+        builder.setNegativeButton(R.string.SETTING, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                startActivity(new Intent(getApplicationContext(), ActivitySettings.class));
+            }
+        });
+        builder.show();
+    }
+    public void dialogSuccess() {
+        progressDialog.dismiss();
+        Dialog dialog = new DialogUtils(this).buildDialogInfo(
+                getString(R.string.success_checkout),
+                String.format("Succesfully submit the data, Please wait for admin to verify your data"),
+                getString(R.string.OK),
+                R.drawable.img_checkout_success,
+                new CallbackDialog() {
+                    @Override
+                    public void onPositiveClick(Dialog dialog) {
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onNegativeClick(Dialog dialog) {
+
+                    }
+                });
+        dialog.show();
     }
 }

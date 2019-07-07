@@ -89,7 +89,10 @@
         <activity android:name=".ActivityInumkm" />
         <activity android:name=".ActivityDetailTransfer" />
         <activity android:name=".ActivityWaitingpay" />
-        <activity android:name=".ActivityManualorder"></activity>
+        <activity android:name=".ActivityManualorder" />
+        <activity android:name=".ActivityUnverifiedumkm" />
+        <activity android:name=".ActivityDetailumkm" />
+        <activity android:name=".ActivityUMKMorder"></activity>
     </application>
 
 </manifest>
